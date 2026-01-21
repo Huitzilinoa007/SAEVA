@@ -1,0 +1,364 @@
+/* ==================================================
+   RESET TOTAL
+================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==================================================
+   ROOT – SIN SCROLL
+================================================== */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* ❗ NO SCROLL */
+  font-family: "Gayathri", sans-serif;
+}
+
+/* ==================================================
+   TIPOGRAFÍA
+================================================== */
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: white;
+}
+
+.gayathri-thin {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 100;
+}
+
+.gayathri-regular {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 400;
+}
+
+.gayathri-bold {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 700;
+}
+
+/* ==================================================
+   LAYOUT PRINCIPAL
+================================================== */
+.parent {
+  position: relative;
+  width: 100%;
+  height: 100svh; /* viewport real */
+}
+
+/* ==================================================
+   FONDO
+================================================== */
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/img_upibi.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.bg-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* ==================================================
+   BOTÓN REGRESAR
+================================================== */
+.div1 {
+  position: absolute;
+  top: clamp(1rem, 3vh, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+}
+
+/* ==================================================
+   CONTENEDOR CENTRAL
+================================================== */
+.div2 {
+  position: relative;
+  z-index: 1;
+
+  height: 100%;
+  display: grid;
+  place-items: center;
+
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.div2_1 {
+  display: flex;
+  width: -webkit-fill-available;
+  justify-content: center;
+  align-items: center;
+}
+
+.div2_2 {
+  display: flex;
+  width: -webkit-fill-available;
+  justify-content: center;
+  align-items: center;
+}
+
+.div2_2_1 {
+  width: -webkit-fill-available;
+  display: flex;
+  flex: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.div2_2_2 {
+  width: -webkit-fill-available;
+  display: flex;
+  flex: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.div2_3 {
+  display: flex;
+  width: -webkit-fill-available;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==================================================
+   CARD (ESCALA, NO CRECE)
+================================================== */
+.cards {
+  width: -webkit-fill-available;
+  margin: 5%;
+  height: min(85svh, 460px);
+
+  background: #ffffff;
+  border-radius: clamp(0.75rem, 2vw, 1.25rem);
+
+  padding: clamp(1rem, 2.5vh, 2rem);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+@media (min-width: 600px) {
+  .cards {
+    margin: 5%;
+    max-width: 50%;
+  }
+}
+
+/* ==================================================
+   CONTENIDO INTERNO
+================================================== */
+.div2Card {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.div2_2 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vh, 1.6rem);
+  align-items: center;
+  width: -webkit-fill-available;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==================================================
+   TEXTO
+================================================== */
+#title {
+  font-size: clamp(1.6em, 4vh, 2.8rem);
+  line-height: 1.2;
+  text-align: center;
+  font-size: clamp(
+    1.35rem,
+    /* móviles chicos */ 3.8vh,
+    /* escala por altura */ 2.4rem /* desktop */
+  );
+
+  white-space: normal;
+  word-break: break-word;
+}
+
+.card-text {
+  font-size: clamp(0.9rem, 2vh, 1.05rem);
+  text-align: center;
+}
+
+/* ==================================================
+   INPUTS
+================================================== */
+.input {
+  width: 75%;
+  padding: clamp(0.55rem, 1.8vh, 0.8rem);
+
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4b5563;
+  box-shadow: 0 0 0 3px rgba(75, 85, 99, 0.25);
+}
+
+/* ==================================================
+   BOTÓN
+================================================== */
+.btn {
+  width: 100%;
+  max-width: 220px;
+
+  height: clamp(2.6rem, 5vh, 3rem);
+  font-size: clamp(0.95rem, 2.2vh, 1.1rem);
+
+  background: #5a1236;
+  color: white;
+  border-radius: 0.75rem;
+
+  border: none;
+
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+button:hover {
+  color: #5a1236;
+  border: 2px solid #5a1236;
+}
+
+button:after {
+  content: "";
+  background: white;
+  position: absolute;
+  z-index: -1;
+  left: -20%;
+  right: -20%;
+  top: 0;
+  bottom: 0;
+  transform: skewX(-45deg) scale(0, 1);
+  transition: all 0.5s;
+}
+
+button:hover:after {
+  transform: skewX(-45deg) scale(1, 1);
+}
+
+
+
+.imgBtn {
+  height: 1.8rem;
+  width: fit-content;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* ACTIVO */
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== CARD ===== */
+.modal-card {
+  background: white;
+  border-radius: 1.2rem;
+  padding: 2.5rem 2rem;
+  width: min(90%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  transform: scale(0.95);
+  transition: transform 0.25s ease;
+}
+
+.modal-overlay.active .modal-card {
+  transform: scale(1);
+}
+
+/* ===== ICONO ERROR ===== */
+.modal-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid #5A1236;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #5A1236;
+}
+
+/* ===== TEXTO ===== */
+.modal-title {
+  font-size: clamp(1.4rem, 3.5vw, 1.7rem);
+  color: #111827;
+}
+
+.modal-text {
+  font-size: clamp(1rem, 2.8vw, 1.1rem);
+  color: #5A1236;
+  line-height: 1.5;
+}
+
+/* ===== RESPONSIVE EXTRA ===== */
+@media (max-height: 500px) {
+  .modal-card {
+    padding: 1.8rem 1.5rem;
+  }
+}
