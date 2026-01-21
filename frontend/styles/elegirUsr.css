@@ -163,6 +163,10 @@ body {
   .div3_1 {
     margin: 5%;
   }
+
+  .bg-image {
+    background-image: url("../img/img_upibi_768.png");
+  }
 }
 
 .card-text {
