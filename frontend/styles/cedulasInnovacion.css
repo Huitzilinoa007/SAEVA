@@ -95,7 +95,6 @@ body {
   align-items: start;
 }
 
-
 .imgBtn {
   height: 2rem;
   width: fit-content;
@@ -137,7 +136,7 @@ body {
 }
 
 /* ===== CARD ===== */
-.area-card{
+.area-card {
   width: 100%;
   max-width: 520px;
   padding: clamp(18px, 2.5vw, 28px);
@@ -148,7 +147,6 @@ body {
   gap: 20px;
   background-color: white;
 }
-
 
 /* TOP: que se envuelva cuando no cabe */
 .area-top {
@@ -226,7 +224,7 @@ body {
 }
 
 .btn-info {
-  background: #C1C1C1;
+  background: #c1c1c1;
   border: none;
   padding: 16px 24px;
   border-radius: 999px;
@@ -319,8 +317,6 @@ body {
   }
 }
 
-
-
 #cedulasContainer {
   width: 100%;
   display: grid;
@@ -347,9 +343,6 @@ body {
   color: #2d7a4b;
 }
 
-
-
-
 .progress-text {
   font-family: "Gayathri", sans-serif;
   font-size: 1rem; /* mismo tamaño que ya usabas */
@@ -358,7 +351,6 @@ body {
   text-align: right;
   margin-bottom: 6px; /* separación sutil respecto a la barra */
 }
-
 
 * {
   margin: 0;
@@ -457,7 +449,6 @@ body {
   align-items: start;
 }
 
-
 .imgBtn {
   height: 2rem;
   width: fit-content;
@@ -469,7 +460,7 @@ body {
   font-size: clamp(2.2rem, 4.9vw, 3.9rem);
   line-height: 1.25;
   max-width: 30ch;
-  text-align: center;
+  text-align: left;
 }
 
 .cards {
@@ -499,7 +490,7 @@ body {
 }
 
 /* ===== CARD ===== */
-.area-card{
+.area-card {
   width: 100%;
   max-width: 520px;
   padding: clamp(18px, 2.5vw, 28px);
@@ -510,7 +501,6 @@ body {
   gap: 20px;
   background-color: white;
 }
-
 
 /* TOP: que se envuelva cuando no cabe */
 .area-top {
@@ -588,7 +578,7 @@ body {
 }
 
 .btn-info {
-  background: #D3D3D3;
+  background: #d3d3d3;
   border: none;
   padding: 16px 24px;
   border-radius: 999px;
@@ -681,8 +671,6 @@ body {
   }
 }
 
-
-
 #cedulasContainer {
   width: 100%;
   display: grid;
@@ -709,9 +697,6 @@ body {
   color: #2d7a4b;
 }
 
-
-
-
 .progress-text {
   font-family: "Gayathri", sans-serif;
   font-size: 1rem; /* mismo tamaño que ya usabas */
@@ -720,7 +705,6 @@ body {
   text-align: right;
   margin-bottom: 6px; /* separación sutil respecto a la barra */
 }
-
 
 /* ========================= */
 /* ANIMACIÓN BOTONES        */
@@ -758,4 +742,139 @@ body {
   background-color: #6b1c40;
 }
 
+/* HEADER */
+.header-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
 
+#div2_1 {
+  display: flex;
+  flex: 3;
+  align-items: center;
+  justify-content: left;
+}
+
+@media (max-width: 900px) {
+  #div2_1 {
+    justify-content: center;
+  }
+}
+
+#div2_2 {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-btn {
+  max-width: 180px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+
+  background: #6b1d3b;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.toggle-btn:hover {
+  background: #54162e;
+  transform: translateY(-1px);
+}
+
+.toggle-icon {
+  font-size: 1.2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #title {
+    flex: unset;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .toggle-btn {
+    flex: unset;
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+
+/* CONTENEDOR FLEX PARA CENTRADO */
+.empty-state-wrapper {
+  width: 100%;
+  min-height: 60vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CARD DE ESTADO VACÍO */
+.empty-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 32px;
+
+  max-width: 420px;
+  width: 100%;
+
+  text-align: center;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ICONO */
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+/* TEXTO */
+.empty-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.empty-card p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .empty-card {
+    padding: 28px 20px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+}

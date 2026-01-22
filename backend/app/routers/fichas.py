@@ -30,7 +30,7 @@ def get_fichas_by_codigo(codigo: str):
     area = area_res.data[0]
 
     fichas = supabase.table("fichas") \
-        .select("id, nombre, descripcion, paso_actual") \
+        .select("id, nombre, estado, descripcion, paso_actual") \
         .eq("area_id", area["id"]) \
         .order("id") \
         .execute()
