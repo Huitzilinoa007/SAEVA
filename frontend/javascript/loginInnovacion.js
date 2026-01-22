@@ -3,9 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("errorModal");
   const closeModalBtn = document.getElementById("closeModalBtn");
 
-  loginBtn.addEventListener("click", async () => {
-    const user = document.querySelector('input[type="text"]').value.trim();
-    const pass = document.querySelector('input[type="password"]').value.trim();
+  const userInput = document.querySelector('input[type="text"]');
+  const passInput = document.querySelector('input[type="password"]');
+
+  loginBtn.addEventListener("click", login);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      login();
+    }
+  });
+
+  async function login() {
+    const user = userInput.value.trim();
+    const pass = passInput.value.trim();
 
     if (!user || !pass) {
       openModal("Completa todos los campos");
@@ -18,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nombreUsr: user,
-          password: pass
-        })
+          password: pass,
+        }),
       });
 
       if (!res.ok) {
@@ -27,13 +37,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // login correcto
-      window.location.replace("areas.html");
+      const data = await res.json();
 
+      sessionStorage.clear();
+
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("usuario", user);
+      window.location.replace("areas.html");
     } catch (error) {
       openModal("Error de conexión con el servidor");
     }
-  });
+  }
 
   function openModal(msg) {
     modal.querySelector(".modal-text").innerText = msg;

@@ -1,11 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from supabase_client import supabase
-
+from fastapi.middleware.cors import CORSMiddleware
+from routers.fichas import router as fichas_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.include_router(fichas_router, prefix="/fichas", tags=["Fichas"])
+
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // 🔐 Validación de sesión
+  if (sessionStorage.getItem("isLoggedIn") !== "true") {
+    window.location.replace("loginInnovacion.html");
+    return;
+  }
+
   cargarAreas();
 });
 
@@ -6,27 +12,27 @@ async function cargarAreas() {
   try {
     const res = await fetch("http://127.0.0.1:8000/areas/resumen");
 
-    if (!res.ok) throw new Error("Error al cargar áreas");
+    if (!res.ok) {
+      throw new Error("Error al cargar áreas");
+    }
 
     const json = await res.json();
+    const areas = json.data;
 
-    const areas = json.data;  // <-- aquí está la clave
     const container = document.getElementById("areasContainer");
-
     container.innerHTML = "";
 
     if (!areas || areas.length === 0) {
-      container.innerHTML = `<p>No hay áreas registradas.</p>`;
+      container.innerHTML = "<p>No hay áreas registradas.</p>";
       return;
     }
 
     areas.forEach((area) => {
-      const card = crearCardArea(area);
-      container.appendChild(card);
+      container.appendChild(crearCardArea(area));
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("Error:", error);
   }
 }
 
@@ -40,7 +46,9 @@ function crearCardArea(area) {
 
       <div class="area-info">
         <h3 class="area-title">${area.area}</h3>
-        <p class="area-subtitle">${area.completadas}/${area.total_cedulas} Cédulas</p>
+        <p class="area-subtitle">
+          ${area.completadas}/${area.total_cedulas} Cédulas
+        </p>
       </div>
     </div>
 
@@ -51,11 +59,8 @@ function crearCardArea(area) {
     </div>
 
     <div class="area-actions">
-      <button class="btn-info" type="button">
-        Más info <span class="dots">•••</span>
-      </button>
 
-      <button class="btn-continue" type="button" data-area="${area.codigo}">
+      <button class="btn-continue" type="button">
         Continuar <span class="arrow">›</span>
       </button>
     </div>
@@ -68,7 +73,7 @@ function crearCardArea(area) {
   `;
 
   card.querySelector(".btn-continue").addEventListener("click", () => {
-    window.location.href = `criteriosAreas.html?area=${area.codigo}`;
+    window.location.href = `cedulasInnovacion.html?area=${area.codigo}`;
   });
 
   return card;

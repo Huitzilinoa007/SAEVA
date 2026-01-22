@@ -3,8 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("errorModal");
   const closeModalBtn = document.getElementById("closeModalBtn");
 
-  loginBtn.addEventListener("click", async () => {
-    const codigo = document.querySelector('input[type="text"]').value.trim();
+  loginBtn.addEventListener("click", login);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") login();
+  });
+
+  async function login() {
+    const codigoInput = document.querySelector('input[type="text"]');
+    const codigo = codigoInput.value.trim().toUpperCase();
 
     if (!codigo) {
       openModal("Ingresa el código del área");
@@ -25,14 +31,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
 
-      // guardar sesión del área
-      localStorage.setItem("area", JSON.stringify(data.area));
+      // 🔥 LIMPIAR SESIÓN PREVIA
+      sessionStorage.clear();
 
-      window.location.replace("criteriosAreas.html");
+      // ✅ SESIÓN UNIFICADA (ESTÁNDAR)
+      sessionStorage.setItem(
+        "session",
+        JSON.stringify({
+          tipo: "area",
+          area: {
+            id: data.area.id,
+            nombre: data.area.nombre,
+            codigo: data.area.codigo,
+          },
+        })
+      );
+
+      window.location.replace("cedulasAreas.html");
     } catch (error) {
+      console.error(error);
       openModal("Error de conexión con el servidor");
     }
-  });
+  }
 
   function openModal(msg) {
     modal.querySelector(".modal-text").innerText = msg;
