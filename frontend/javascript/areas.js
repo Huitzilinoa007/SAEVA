@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function cargarAreas() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/areas/resumen");
+    const res = await fetch("http://127.0.0.1:8000/areas/");
 
     if (!res.ok) {
       throw new Error("Error al cargar áreas");

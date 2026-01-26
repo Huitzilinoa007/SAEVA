@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function cargarCedulas(areaCodigo) {
   try {
     const res = await fetch(
-      `http://127.0.0.1:8000/fichas/codigo/${areaCodigo}`,
+      `http://127.0.0.1:8000/cedulas/codigo/${areaCodigo}`,
     );
 
     if (!res.ok) throw new Error("Error al cargar cédulas");
@@ -63,7 +63,7 @@ function renderCedulas() {
   console.table(
     cedulasOriginales.map((c) => ({
       id: c.id,
-      nombre: c.nombre,
+      nombre: c.estandar_nombre,
       estado: c.estado,
       paso_actual: c.paso_actual,
       tipo_estado: typeof c.estado,
@@ -108,7 +108,8 @@ function crearCardCedula(cedula) {
   const card = document.createElement("div");
   card.className = "area-card";
 
-  const porcentaje = calcularProgreso(cedula.paso_actual);
+  const porcentaje = calcularProgresoPorEstado(cedula.estado);
+  const textoProgreso = textoProgresoPorEstado(cedula.estado);
   const completa = esCedulaCompleta(cedula);
 
   const estadoTexto = completa ? "Completada" : "Pendiente";
@@ -123,15 +124,17 @@ function crearCardCedula(cedula) {
           ${estadoTexto}
         </span>
 
-        <h3 class="area-title">${cedula.nombre}</h3>
+        <h3 class="area-title">${cedula.estandar_nombre}</h3>
         <p class="area-subtitle">
-          ${cedula.descripcion || "Sin descripción disponible"}
+          ${cedula.criterio_nombre || "Sin criterio disponible"}
         </p>
       </div>
     </div>
 
     <div class="progress-container">
-      <div class="progress-text">${porcentaje}%</div>
+      <div class="progress-text">
+        ${porcentaje}% · ${textoProgreso}
+      </div>
       <div class="progress-bar">
         <div class="progress-fill" style="width:${porcentaje}%;"></div>
       </div>
@@ -139,23 +142,50 @@ function crearCardCedula(cedula) {
 
     <div class="area-actions">
       <button class="btn-continue">
-        Continuar <span class="arrow">›</span>
+        ${completa ? "Ver" : "Continuar"} <span class="arrow">›</span>
       </button>
     </div>
   `;
 
   card.querySelector(".btn-continue").addEventListener("click", () => {
-    window.location.href = `formularioInnovacion.html?area=${areaCodigoGlobal}&ficha=${cedula.id}`;
+    sessionStorage.setItem(
+      "formularioSession",
+      JSON.stringify({
+        tipo: "area",
+        areaCodigo: areaCodigoGlobal,
+        formularioId: cedula.id,
+      }),
+    );
+
+    window.location.href = "formulario.html";
   });
 
   return card;
 }
 
-function calcularProgreso(pasoActual = 0) {
-  const totalPasos = 4;
-  return Math.round((pasoActual / totalPasos) * 100);
+function calcularProgresoPorEstado(estado = 0) {
+  const mapa = {
+    0: 0,
+    1: 25,
+    2: 50,
+    3: 75,
+    4: 100,
+  };
+
+  return mapa[Number(estado)] ?? 0;
 }
 
+function textoProgresoPorEstado(estado = 0) {
+  const textos = {
+    0: "Sin iniciar",
+    1: "Datos capturados",
+    2: "Información revisada",
+    3: "Justificación agregada",
+    4: "Cédula completada",
+  };
+
+  return textos[Number(estado)] ?? "Sin estado";
+}
 function esCedulaCompleta(c) {
-  return Number(c.estado) === 1 && Number(c.paso_actual) === 4;
+  return Number(c.estado) === 4;
 }
