@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Formulario</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="../../styles/formulario.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="../../javascript/formulario.js" defer></script>
+  </head>
+
+  <body>
+    <!-- BOTÓN REGRESAR -->
+    <div class="div1">
+      <img
+        class="imgBtn"
+        src="../../img/btnRegresar2.png"
+        onclick="location.href = 'cedulasAreas.html'"
+      />
+    </div>
+
+    <!-- HEADER CON IMAGEN -->
+    <div class="divTop">
+      <header class="header-banner">
+        <img src="../../img/img_upibi.png" alt="Banner" />
+        <div class="logos">
+          <img src="../../img/logo_upibi.png" />
+          <img src="../../img/logo_ciees.png" />
+        </div>
+      </header>
+    </div>
+    <!-- STEPPER -->
+
+    <div class="divTop">
+      <div class="stepper">
+        <div class="step active" data-step="1">
+          <div class="circle">1</div>
+          <span>Datos<br />personales</span>
+        </div>
+
+        <div class="line completed"></div>
+
+        <div class="step" data-step="2">
+          <div class="circle">2</div>
+          <span>Información<br />del proceso</span>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="step" data-step="3">
+          <div class="circle">3</div>
+          <span>Valoración<br />argumentada</span>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="step" data-step="4">
+          <div class="circle">4</div>
+          <span>Evidencia</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <main class="card">
+      <section id="div_main_1" class="step-content active">
+        <div id="accordion">
+          <div id="accordion-header">
+            <h2 id="nameCriterio"></h2>
+            <span
+              >Este formulario tiene como propósito apoyar el proceso de
+              autoevaluación del programa educativo, permitiendo analizar de
+              manera reflexiva y sistemática su desempeño con base en los
+              criterios del Marco General de Evaluación 2024 (CIEES),
+              identificar fortalezas y áreas de mejora, y sustentar acciones de
+              mejora continua mediante evidencias.</span
+            >
+          </div>
+        </div>
+        <div id="accordion">
+          <div id="accordion-header">
+            <h2>Datos personales</h2>
+            <h2 class="field-title">Nombre del responsable</h2>
+            <input
+              id="nombreResponsable"
+              placeholder="Nombre completo empezando por Nombre(s)"
+            />
+            <h2 class="field-title">Cargo del responsable</h2>
+            <input
+              id="cargoResponsable"
+              placeholder="Nombre del puesto que ejerce en la UPIBI"
+            />
+          </div>
+        </div>
+      </section>
+      <section id="div_main_2" class="step-content">
+        <!-- INFO GENERAL -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Información del proceso</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Descripción general</h3>
+              <textarea id="infoGeneral"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- EJE -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Eje</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Nombre del eje</h3>
+              <input id="ejeNombre" />
+            </div>
+
+            <div class="field-group">
+              <h3 class="field-title">Descripción del eje</h3>
+              <textarea id="ejeDescripcion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORÍA -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Categoría</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Nombre de la categoría</h3>
+              <input id="categoriaNombre" />
+            </div>
+
+            <div class="field-group">
+              <h3 class="field-title">Descripción de la categoría</h3>
+              <textarea id="categoriaDescripcion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- INDICADOR -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Indicador</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Nombre del indicador</h3>
+              <input id="indicadorNombre" />
+            </div>
+
+            <div class="field-group">
+              <h3 class="field-title">Descripción del indicador</h3>
+              <textarea id="indicadorDescripcion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTÁNDAR -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Descripción del estándar</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Nombre del estándar</h3>
+              <input id="estandarNombre" />
+            </div>
+
+            <div class="field-group">
+              <h3 class="field-title">Descripción del estándar</h3>
+              <textarea id="estandarDescripcion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- CRITERIO -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <h2>Criterio</h2>
+            <span class="arrow">⌄</span>
+          </div>
+          <div class="accordion-content">
+            <div class="field-group">
+              <h3 class="field-title">Nombre del criterio</h3>
+              <input id="criterioNombre" />
+            </div>
+
+            <div class="field-group">
+              <h3 class="field-title">Descripción del criterio</h3>
+              <textarea id="criterioDescripcion"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASO 3 -->
+      <section id="div_main_3" class="step-content">
+        <div id="accordion">
+          <div id="accordion-header">
+            <h2>Valoración argumentada del estándar</h2>
+            <span
+              >Redacte una valoración argumentada que justifique el nivel de
+              cumplimiento del estándar, con base en los criterios establecidos
+              y las evidencias del programa educativo que le competen a su
+              área.</span
+            >
+            <div class="ai-input-wrapper">
+              <textarea
+                id="valoraArgumentada"
+                placeholder="Escribe aquí tu valoración argumentada..."
+              ></textarea>
+
+              <div class="ai-input-footer">
+                <span id="charCount">Palabras: 0</span>
+
+                <button id="btnMejorarIA" type="button">
+                  ✨ Mejorar redacción
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASO 4 -->
+      <section id="div_main_4" class="step-content">
+        <h2>Evidencias</h2>
+      </section>
+
+      <div class="step-controls">
+        <button id="btnPrev">Anterior</button>
+        <button id="btnNext">Guardar</button>
+      </div>
+    </main>
+    <div id="modalIA" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2>Revisión de la valoración argumentada</h2>
+        <p class="modal-subtitle">
+          El texto ingresado no cumple con todos los elementos requeridos para
+          una valoración argumentada conforme al Marco General de Evaluación
+          CIEES 2024.
+        </p>
+
+        <ul id="listaFaltantes"></ul>
+
+        <div class="modal-actions">
+          <button id="cerrarModalIA" class="btn-primary" type="button">
+            Revisar y corregir texto
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="modalIAExterna" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2>Has alcanzado el límite de uso de IA</h2>
+
+        <p class="modal-subtitle">
+          Para continuar, puedes apoyarte en una herramienta externa de IA y
+          después pegar aquí tu texto mejorado.
+        </p>
+
+        <p><strong>Te sugerimos usar:</strong></p>
+        <ul>
+          <li>ChatGPT</li>
+          <li>Google Gemini</li>
+          <li>Microsoft Copilot</li>
+        </ul>
+
+        <p><strong>Prompt sugerido:</strong></p>
+
+        <pre
+          id="promptIAExterna"
+          style="
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 240px;
+            overflow-y: auto;
+          "
+        ></pre>
+
+        <div class="modal-actions">
+          <button id="copiarPromptIA" type="button">Copiar prompt</button>
+
+          <button id="abrirChatGPT" type="button">Abrir en ChatGPT</button>
+
+          <button id="cerrarModalIAExterna" type="button">Entendido</button>
+        </div>
+      </div>
+    </div>
+    <div id="appAlert" class="app-alert hidden">
+      <div class="app-alert-card">
+        <div class="app-alert-icon" id="appAlertIcon"></div>
+
+        <div class="app-alert-content">
+          <h3 id="appAlertTitle"></h3>
+          <p id="appAlertMessage"></p>
+        </div>
+
+        <button id="appAlertClose" type="button">Entendido</button>
+      </div>
+    </div>
+  </body>
+</html>

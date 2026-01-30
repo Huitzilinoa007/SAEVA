@@ -1,0 +1,175 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: white;
+}
+
+.gayathri-thin {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.gayathri-regular {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.gayathri-bold {
+  font-family: "Gayathri", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.parent {
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 12;
+}
+
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/img_upibi.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.bg-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.div1 {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  margin-top: 5%;
+  margin-left: 5%;
+}
+
+.div2 {
+  position: relative;
+  z-index: 1;
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.div3 {
+  position: relative;
+  z-index: 1;
+  flex: 9;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+}
+
+.div3_1 {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.div3_2 {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imgBtn {
+  height: 2rem;
+  width: fit-content;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+#title {
+  font-size: clamp(2.2rem, 4.9vw, 3.9rem);
+  line-height: 1.25;
+  max-width: 30ch;
+  text-align: center;
+}
+
+.cards {
+  width: clamp(14rem, 30vw, 22rem);
+  background: white;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.cards:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 14px 20px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-aspect-ratio: 4/7) {
+  .div3 {
+    flex-direction: column;
+  }
+
+  .div3_1 {
+    margin: 5%;
+  }
+
+  .bg-image {
+    background-image: url("../img/img_upibi_768.png");
+  }
+}
+
+.card-text {
+  font-size: 1.3rem;
+  text-align: center;
+}

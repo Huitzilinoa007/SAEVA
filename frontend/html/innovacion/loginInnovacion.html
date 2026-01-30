@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login Innovación</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="../../styles/loginInnovacion.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="../../javascript/loginInnovacion.js"></script>
+  </head>
+  <body>
+    <div class="parent">
+      <div class="bg-image"></div>
+      <div class="div1">
+        <img
+          class="imgBtn"
+          src="../../img/btn_regresar.png"
+          onclick="location.href = '../elegirUsr.html'"
+        />
+      </div>
+      <div class="div2">
+        <div class="cards">
+          <div class="div2Card">
+            <div class="div2_1">
+              <span id="title" class="gayathri-bold">Inicio de Sesión</span>
+            </div>
+            <div class="div2_2">
+              <div class="div2_2_1">
+                <input
+                  type="text"
+                  class="input gayathri-bold card-text"
+                  placeholder="Nombre de usuario"
+                />
+              </div>
+              <div class="div2_2_2">
+                <input
+                  type="password"
+                  class="input gayathri-bold card-text"
+                  placeholder="Contraseña"
+                />
+              </div>
+            </div>
+            <div class="div2_3">
+              <button class="btn montserrat" id="loginBtn">Ingresar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="errorModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-icon">✕</div>
+
+        <h2 class="modal-title gayathri-bold">Campos incompletos</h2>
+
+        <p class="modal-text gayathri-regular">
+          Debes completar correctamente todos los campos antes de continuar.
+        </p>
+
+        <button id="closeModalBtn" class="btn montserrat">Aceptar</button>
+      </div>
+    </div>
+  </body>
+</html>

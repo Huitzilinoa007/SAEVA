@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Cédulas</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ESTILOS -->
+    <link rel="stylesheet" href="../../styles/cedulasAreas.css" />
+
+    <!-- FUENTE GAYATHRI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JS -->
+    <script src="../../javascript/cedulasAreas.js" defer></script>
+  </head>
+
+  <body>
+    <div class="parent">
+      <div class="div1">
+        <img
+          class="imgBtn"
+          src="../../img/btn_regresar.png"
+          alt="Regresar"
+          onclick="location.href = 'loginAreas.html'"
+        />
+      </div>
+
+      <div class="div2 header-flex">
+        <div id="div2_1">
+          <span id="title" class="montserrat"></span>
+        </div>
+        <div id="div2_2">
+          <button id="toggleEstadoBtn" class="toggle-btn">
+            Por completar <span class="toggle-icon">⇄</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="div3">
+        <div id="cedulasContainer"></div>
+      </div>
+    </div>
+  </body>
+</html>
