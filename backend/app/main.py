@@ -3,7 +3,9 @@ from pydantic import BaseModel
 from supabase_client import supabase
 from fastapi.middleware.cors import CORSMiddleware
 from routers.cedulas import router as cedulas_router
+from routers.areas import router as areas_router
 from routers.ia import router as ia_router
+from routers.evidencias import router as evidencias_router
 
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +16,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://127.0.0.1:5500",
-        "http://localhost:5500",
+        "http://localhost:5500"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -24,6 +26,8 @@ app.add_middleware(
 
 app.include_router(cedulas_router)
 app.include_router(ia_router)
+app.include_router(areas_router)
+app.include_router(evidencias_router)
 
 class LoginData(BaseModel):
     nombreUsr: str

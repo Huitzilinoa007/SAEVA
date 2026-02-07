@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Información Cédula</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ESTILOS -->
+    <link rel="stylesheet" href="../../styles/informacionCedula.css" />
+
+    <!-- FUENTE GAYATHRI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JS -->
+    <script src="../../javascript/informacionCedula.js" defer></script>
+  </head>
+  <body>
+    <div class="parent">
+      <div class="div1">
+        <img
+          class="imgBtn"
+          src="../../img/btn_regresar.png"
+          alt="Regresar"
+          onclick="location.href = 'cedulasInnovacion.html'"
+        />
+      </div>
+      <div class="div2">
+        <div class="card">
+          <!-- HEADER -->
+          <div class="card-header">
+            <div class="estado">
+              <span class="estado-icon">✔</span>
+              <span id="estadoTexto">Completado</span>
+            </div>
+
+            <div class="area-info">
+              <span id="areaNombre"></span>
+              <span class="slash">/</span>
+              <span id="criterioNombre"></span>
+            </div>
+          </div>
+
+          <!-- TÍTULO -->
+          <h1 id="tituloCedula"></h1>
+
+          <!-- VALORACIÓN -->
+          <section class="box">
+            <h2>Valoración argumentada</h2>
+            <p id="valoracionTexto"></p>
+          </section>
+
+          <!-- EVIDENCIAS -->
+          <section class="box">
+            <h2>Evidencias presentadas</h2>
+            <div id="evidenciasContainer"></div>
+          </section>
+
+          <!-- BOTONES -->
+          <div class="acciones">
+            <button
+              class="btn-secundario"
+              onclick="location.href = 'cedulasInnovacion.html'"
+            >
+              Cerrar
+            </button>
+
+            <button class="btn-principal" id="descargarFicha">Descargar ficha</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

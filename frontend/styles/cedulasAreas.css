@@ -880,3 +880,81 @@ body {
 }
 
 
+
+
+/* ===== OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vw;
+  z-index: 9999;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* ===== CARD ===== */
+.modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 36rem;
+  padding: 3rem 2.5rem;
+  border-radius: 1.25rem;
+  text-align: center;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.3);
+}
+
+/* ===== TEXTOS ===== */
+.modal-card h2 {
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 700;
+  color: #5a0f2e;
+  margin-bottom: 1rem;
+}
+
+.modal-card p {
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* ===== BOTÓN GUINDA ===== */
+.btn-modal {
+  width: 100%;
+  max-width: 20rem;
+  background: #7a1337;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1.5rem;
+  font-size: clamp(0.95rem, 3.5vw, 1.05rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-modal:hover {
+  background: #5a0f2e;
+  transform: translateY(-0.1rem);
+}
+
+.btn-modal:active {
+  transform: translateY(0);
+}
+
+/* ===== AJUSTES MÓVIL MUY PEQUEÑO ===== */
+@media (max-width: 30rem) {
+  .modal-card {
+    padding: 2.2rem 1.6rem;
+  }
+
+  .btn-modal {
+    max-width: 100%;
+  }
+}

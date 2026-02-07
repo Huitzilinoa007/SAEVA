@@ -103,20 +103,6 @@
         </div>
       </section>
       <section id="div_main_2" class="step-content">
-        <!-- INFO GENERAL -->
-        <div class="accordion">
-          <div class="accordion-header">
-            <h2>Información del proceso</h2>
-            <span class="arrow">⌄</span>
-          </div>
-          <div class="accordion-content">
-            <div class="field-group">
-              <h3 class="field-title">Descripción general</h3>
-              <textarea id="infoGeneral"></textarea>
-            </div>
-          </div>
-        </div>
-
         <!-- EJE -->
         <div class="accordion">
           <div class="accordion-header">
@@ -131,7 +117,7 @@
 
             <div class="field-group">
               <h3 class="field-title">Descripción del eje</h3>
-              <textarea id="ejeDescripcion"></textarea>
+              <textarea id="ejeDescripcion" class="textArea-Descrip"></textarea>
             </div>
           </div>
         </div>
@@ -150,7 +136,7 @@
 
             <div class="field-group">
               <h3 class="field-title">Descripción de la categoría</h3>
-              <textarea id="categoriaDescripcion"></textarea>
+              <textarea id="categoriaDescripcion" class="textArea-Descrip"></textarea>
             </div>
           </div>
         </div>
@@ -168,7 +154,7 @@
             </div>
 
             <div class="field-group">
-              <h3 class="field-title">Descripción del indicador</h3>
+              <h3 class="field-title" class="textArea-Descrip">Descripción del indicador</h3>
               <textarea id="indicadorDescripcion"></textarea>
             </div>
           </div>
@@ -188,7 +174,7 @@
 
             <div class="field-group">
               <h3 class="field-title">Descripción del estándar</h3>
-              <textarea id="estandarDescripcion"></textarea>
+              <textarea id="estandarDescripcion" class="textArea-Descrip"></textarea>
             </div>
           </div>
         </div>
@@ -207,7 +193,7 @@
 
             <div class="field-group">
               <h3 class="field-title">Descripción del criterio</h3>
-              <textarea id="criterioDescripcion"></textarea>
+              <textarea id="criterioDescripcion" class="textArea-Descrip"></textarea>
             </div>
           </div>
         </div>
@@ -243,13 +229,50 @@
       </section>
 
       <!-- PASO 4 -->
-      <section id="div_main_4" class="step-content">
-        <h2>Evidencias</h2>
-      </section>
+      <!-- ===============================
+     STEP 4 · EVIDENCIAS
+=============================== -->
+      <div id="div_main_4" class="step-content">
+        <div id="accordion">
+          <div id="accordion-header">
+            <h2 class="step-title">Evidencias requeridas</h2>
+            <hr />
+
+            <p class="step-description">
+              Adjunte evidencia documental que respalde la valoración
+              argumentada del estándar. Suba archivos PDF que demuestren el
+              cumplimiento de los criterios establecidos.
+            </p>
+
+            <!-- LISTA -->
+            <div id="evidenciasGrid" class="evidencias-list"></div>
+
+            <!-- ACCIONES -->
+            <div class="evidencias-footer">
+              <button id="btnAgregarEvidencia" class="btn-agregar">
+                ➕ Agregar Evidencia
+              </button>
+
+              <button id="btnGuardarEvidencias" class="btn-guardar">
+                💾 Guardar evidencias
+              </button>
+            </div>
+
+            <input
+              type="file"
+              id="inputEvidencia"
+              accept="application/pdf"
+              multiple
+              hidden
+            />
+          </div>
+        </div>
+      </div>
 
       <div class="step-controls">
         <button id="btnPrev">Anterior</button>
         <button id="btnNext">Guardar</button>
+        <button id="btnTerminar">Terminar</button>
       </div>
     </main>
     <div id="modalIA" class="modal-overlay hidden">

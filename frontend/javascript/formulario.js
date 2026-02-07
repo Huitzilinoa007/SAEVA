@@ -2,6 +2,15 @@ let usosIARestantes = null;
 let cedulaId = null;
 let estadoBD = null;
 
+const inputEvidencia = document.getElementById("inputEvidencia");
+const grid = document.getElementById("evidenciasGrid");
+const btnAgregar = document.getElementById("btnAgregarEvidencia");
+const btnGuardar = document.getElementById("btnGuardarEvidencias");
+const btnTerminar = document.getElementById("btnTerminar");
+
+let evidenciasPendientes = [];
+let evidenciasGuardadas = [];
+
 const btnMejorarIA = document.getElementById("btnMejorarIA");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -39,6 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
       usosIARestantes = data.restantes;
       actualizarBotonIA();
     });
+
+  //PDFS:
+  entrarStep4();
 });
 
 /* ===============================
@@ -80,7 +92,6 @@ async function cargarCedula(cedulaId) {
     estadoBD = data.estado;
 
     // INFO GENERAL
-    setValue("infoGeneral", data.info_general);
     setValue("nombreResponsable", data.nombre_responsable);
     setValue("cargoResponsable", data.cargo_responsable);
 
@@ -103,12 +114,11 @@ async function cargarCedula(cedulaId) {
     // CRITERIO
     setValue("criterioNombre", data.criterio_nombre);
     const elementoTit = document.getElementById("nameCriterio");
-    elementoTit.textContent = data.criterio_nombre ?? "";
-    setValue("valoraArgumentada", data.valoracion);
-
+    elementoTit.textContent = "Criterio " + data.criterio_nombre ?? "";
+    setValue("criterioDescripcion", data.criterio_descripcion);
 
     //VALORACION ARGUMENTADA
-    setValue("criterioDescripcion", data.criterio_descripcion);
+    setValueTextArea("valoraArgumentada", data.valoracion);
   } catch (error) {
     mostrarAlerta({
       tipo: "warning",
@@ -141,6 +151,21 @@ function setValue(id, value) {
   }
 }
 
+function setValueTextArea(id, value) {
+  const el = document.getElementById(id);
+
+  if (!el) {
+    mostrarAlerta({
+      tipo: "error",
+      titulo: "Elemento no existe",
+      mensaje: "Error",
+    });
+    return;
+  }
+
+  el.value = value ?? "";
+}
+
 let currentStep = 1;
 const TOTAL_STEPS = 4;
 
@@ -163,7 +188,7 @@ function actualizarBotonSiguiente(currentStep, estadoBD) {
   } else {
     btnPrev.style.visibility = "hidden";
   }
-  if (currentStep <= estadoBD + 1) {
+  if (currentStep <= estadoBD + 1 && currentStep != 4) {
     btnNext.style.display = "inline-flex";
   } else {
     btnNext.style.display = "none";
@@ -193,6 +218,7 @@ async function refrescarEstadoDesdeBD() {
 }
 
 document.getElementById("btnNext").addEventListener("click", async () => {
+  btnTerminar.style.display = "none";
   if (currentStep === 1) {
     const nombre = document.getElementById("nombreResponsable").value.trim();
     const cargo = document.getElementById("cargoResponsable").value.trim();
@@ -242,7 +268,8 @@ document.getElementById("btnNext").addEventListener("click", async () => {
       });
       return;
     }
-  } else if (currentStep === 2) {
+  }
+  if (currentStep === 2) {
     try {
       const session = JSON.parse(sessionStorage.getItem("formularioSession"));
 
@@ -277,7 +304,6 @@ document.getElementById("btnNext").addEventListener("click", async () => {
       return;
     }
   }
-
   if (currentStep === 3) {
     const texto = textarea.value.trim();
     const palabras = countWords(texto).length;
@@ -318,6 +344,9 @@ document.getElementById("btnNext").addEventListener("click", async () => {
         titulo: "Datos guardados correctamente",
         mensaje: "Valoración guardada correctamente.",
       });
+
+      btnTerminar.style.display = "inline-flex";
+      entrarStep4();
     } catch (err) {
       mostrarAlerta({
         tipo: "warning",
@@ -348,6 +377,11 @@ document.getElementById("btnPrev").addEventListener("click", () => {
 document.querySelectorAll(".step").forEach((stepEl) => {
   stepEl.addEventListener("click", () => {
     const step = Number(stepEl.dataset.step);
+    btnTerminar.style.display = "none";
+    if (step === 4) {
+      btnTerminar.style.display = "inline-flex";
+      entrarStep4();
+    }
     currentStep = step;
     mostrarPaso(step);
   });
@@ -388,7 +422,7 @@ textarea.addEventListener("input", () => {
 
 //
 btnMejorarIA.addEventListener("click", async () => {
-  if (!(currentStep === estadoBD + 1)) {
+  if (!(currentStep <= estadoBD + 1)) {
     mostrarAlerta({
       tipo: "warning",
       titulo: "Uso de botón de IA limitado",
@@ -622,3 +656,234 @@ function mostrarAlerta({ tipo = "info", titulo = "", mensaje = "" }) {
     modal.classList.add("hidden");
   };
 }
+
+//PDF
+// ===============================
+// ELEMENTOS
+// ===============================
+
+// ===============================
+// STEP 4
+// ===============================
+async function entrarStep4() {
+  evidenciasPendientes = [];
+  grid.innerHTML = "";
+  await cargarEvidenciasGuardadas(); // 👈 SE CARGAN AL ENTRAR
+
+  // Mostrar/ocultar botón Guardar según estado
+  if (estadoBD === 3) {
+    btnGuardar.style.display = "inline-flex";
+  } else {
+    btnGuardar.style.display = "none";
+  }
+}
+
+// ===============================
+// AGREGAR ARCHIVO
+// ===============================
+btnAgregar.addEventListener("click", () => inputEvidencia.click());
+
+inputEvidencia.addEventListener("change", () => {
+  [...inputEvidencia.files].forEach((file) => {
+    if (file.type !== "application/pdf") return;
+
+    const nombre = file.name;
+
+    const existeEnPendientes = evidenciasPendientes.some(
+      (f) => f.name === nombre,
+    );
+
+    const existeEnGuardadas = evidenciasGuardadas.some(
+      (e) => e.nombre_archivo === nombre,
+    );
+
+    if (existeEnPendientes || existeEnGuardadas) {
+      mostrarAlerta({
+        tipo: "warning",
+        titulo: "Archivo duplicado",
+        mensaje: `Ya existe una evidencia llamada "${nombre}"`,
+      });
+      return;
+    }
+
+    evidenciasPendientes.push(file);
+  });
+
+  renderEvidencias();
+  inputEvidencia.value = "";
+});
+
+// ===============================
+// GUARDAR
+// ===============================
+btnGuardar.addEventListener("click", async () => {
+  if (evidenciasPendientes.length === 0) {
+    mostrarAlerta({
+      tipo: "warning",
+      titulo: "Sin evidencias",
+      mensaje: "No hay evidencias para guardar",
+    });
+    return;
+  }
+
+  for (const file of evidenciasPendientes) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch(
+      `http://127.0.0.1:8000/cedulas/${cedulaId}/evidencias`,
+      { method: "POST", body: formData },
+    );
+
+    if (!res.ok) {
+      mostrarAlerta({
+        tipo: "error",
+        titulo: "Error",
+        mensaje: "No se pudieron guardar las evidencias",
+      });
+      return;
+    }
+  }
+
+  evidenciasPendientes = [];
+  await entrarStep4();
+
+  mostrarAlerta({
+    tipo: "success",
+    titulo: "Guardado",
+    mensaje: "Evidencias guardadas correctamente",
+  });
+});
+
+// ===============================
+// CARGAR DESDE BD
+// ===============================
+async function cargarEvidenciasGuardadas() {
+  const res = await fetch(
+    `http://127.0.0.1:8000/cedulas/${cedulaId}/evidencias`,
+  );
+
+  if (!res.ok) return;
+
+  evidenciasGuardadas = await res.json();
+  renderEvidencias();
+}
+
+// ===============================
+// RENDER
+// ===============================
+function renderEvidencias() {
+  grid.innerHTML = "";
+
+  // 🔸 PENDIENTES
+  evidenciasPendientes.forEach((file, index) => {
+    const card = document.createElement("div");
+    card.className = "evidencia-card pendiente";
+
+    card.innerHTML = `
+  <div class="evidencia-info">
+    <img src="/frontend/assets/document.svg" class="icon-doc" alt="PDF">
+    <span class="evidencia-nombre">${file.name}</span>
+  </div>
+
+  <div class="evidencia-actions">
+    <button class="btn-ver" title="Ver">
+      <img src="/frontend/assets/ojo.svg" alt="Ver">
+    </button>
+
+    <button class="btn-eliminar" title="Eliminar">
+      <img src="/frontend/assets/basura.svg" alt="Eliminar">
+    </button>
+  </div>
+`;
+    card.querySelector("button:nth-child(1)").onclick = () =>
+      window.open(URL.createObjectURL(file), "_blank");
+
+    card.querySelector("button:nth-child(2)").onclick = () => {
+      evidenciasPendientes.splice(index, 1);
+      renderEvidencias();
+    };
+
+    grid.appendChild(card);
+  });
+
+  // 🔹 GUARDADAS
+  evidenciasGuardadas.forEach((evidencia) => {
+    const card = document.createElement("div");
+    card.className = "evidencia-card guardada";
+
+    card.innerHTML = `
+  <div class="evidencia-info">
+    <img src="/frontend/assets/document.svg" class="icon-doc" alt="PDF">
+    <span class="evidencia-nombre">${evidencia.nombre_archivo}</span>
+  </div>
+
+  <div class="evidencia-actions">
+    <button class="btn-ver" title="Ver">
+      <img src="/frontend/assets/ojo.svg" alt="Ver">
+    </button>
+
+    <button class="btn-eliminar" title="Eliminar">
+      <img src="/frontend/assets/basura.svg" alt="Eliminar">
+    </button>
+  </div>
+`;
+
+    card.querySelector("button:nth-child(1)").onclick = () =>
+      window.open(evidencia.archivo_url, "_blank");
+
+    card.querySelector("button:nth-child(2)").onclick = async () => {
+      const confirmar = confirm("¿Eliminar esta evidencia?");
+      if (!confirmar) return;
+
+      const res = await fetch(
+        `http://127.0.0.1:8000/cedulas/evidencias/${evidencia.id}`,
+        { method: "DELETE" },
+      );
+
+      if (res.ok) {
+        await entrarStep4(); // 👈 estado real
+      }
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+//TERMINAR CÉDULA
+
+btnTerminar.addEventListener("click", async () => {
+  if (evidenciasGuardadas.length === 0 || estadoBD !== 3) {
+    mostrarAlerta({
+      tipo: "warning",
+      titulo: "Cédula incompleta",
+      mensaje:
+        "Favor de completar todo el formulario antes de marcar como completado.",
+    });
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `http://127.0.0.1:8000/cedulas/${cedulaId}/estado?estado=4`,
+      {
+        method: "PUT",
+      },
+    );
+
+    if (!res.ok) throw new Error("No se pudo actualizar el estado");
+
+    estadoBD = 4;
+    mostrarAlerta({
+      tipo: "success",
+      titulo: "¡Felicidades!",
+      mensaje: "Completaste esta cédula 🎉",
+    });
+  } catch (err) {
+    mostrarAlerta({
+      tipo: "error",
+      titulo: "Error",
+      mensaje: err.message,
+    });
+  }
+});

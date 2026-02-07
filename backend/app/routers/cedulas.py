@@ -1,13 +1,45 @@
 from fastapi import APIRouter, HTTPException
 from supabase_client import supabase
 from datetime import datetime
+from fastapi import UploadFile, File
+from fastapi.responses import JSONResponse
+import uuid
+from typing import List
+import re
+import unicodedata
+import tempfile
+import os
+from fastapi.responses import FileResponse
+from docx import Document
+from tempfile import NamedTemporaryFile
+
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.shared import OxmlElement, qn
+from docx.shared import RGBColor
+
+
+def limpiar_nombre_archivo(nombre: str) -> str:
+    # Quitar acentos
+    nombre = unicodedata.normalize("NFKD", nombre)
+    nombre = nombre.encode("ascii", "ignore").decode("ascii")
+
+    # Reemplazar espacios por _
+    nombre = nombre.replace(" ", "_")
+
+    # Eliminar caracteres raros
+    nombre = re.sub(r"[^a-zA-Z0-9._-]", "", nombre)
+
+    return nombre.lower()
+
 
 router = APIRouter(prefix="/cedulas")
 
 @router.get("/area/{area_id}")
 def get_cedulas_by_area(area_id: int):
     return supabase.table("cedulas") \
-        .select("id, nombre, estado") \
+        .select("id, criterio_nombre, estado") \
         .eq("area_id", area_id) \
         .order("id") \
         .execute().data
@@ -79,15 +111,6 @@ def guardar_valoracion(id: int, data: dict):
         "ok": True,
         "actualizado": update_data
     }
-
-
-
-@router.get("/{cedula_id}/evidencias")
-def get_evidencias(cedula_id: int):
-    return supabase.table("evidencias") \
-        .select("*") \
-        .eq("cedula_id", cedula_id) \
-        .execute().data
 
 
 @router.get("/codigo/{codigo}")
@@ -169,3 +192,207 @@ def actualizar_responsable(id: int, data: dict):
         "ok": True,
         "actualizado": update_data
     }
+
+@router.post("/{cedula_id}/evidencias")
+async def subir_evidencia(cedula_id: int, file: UploadFile = File(...)):
+    if file.content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Solo PDFs")
+
+    try:
+        contenido = await file.read()
+        nombre_limpio = limpiar_nombre_archivo(file.filename)
+        filename = f"{uuid.uuid4()}_{nombre_limpio}"
+
+        # 🔹 Subir al bucket público
+        upload_res = supabase.storage.from_("evidencias").upload(
+            filename,
+            contenido,
+            file_options={"content-type": "application/pdf"}
+        )
+        print("Upload response:", upload_res)
+        if upload_res is None:
+            raise HTTPException(status_code=500, detail="El archivo NO se subió al bucket. Revisa la API key y permisos.")
+
+        # 🔹 Obtener URL pública permanente
+        public_url = supabase.storage.from_("evidencias").get_public_url(filename)
+        if not public_url:
+            raise HTTPException(status_code=500, detail="No se pudo obtener la URL pública")
+
+        # 🔹 Guardar en la DB
+        res = supabase.table("evidencias").insert({
+            "cedula_id": cedula_id,
+            "nombre_archivo": file.filename,
+            "archivo_url": public_url,
+            "tipo": "PDF"
+        }).execute()
+
+        return {"ok": True, "archivo": res.data[0]}
+
+    except Exception as e:
+        print("❌ ERROR SUBIENDO PDF:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
+@router.get("/{cedula_id}/evidencias")
+def listar_evidencias(cedula_id: int):
+    res = supabase.table("evidencias") \
+        .select("*") \
+        .eq("cedula_id", cedula_id) \
+        .order("id", desc=True) \
+        .execute()
+
+    return res.data
+
+@router.delete("/evidencias/{evidencia_id}")
+def eliminar_evidencia(evidencia_id: int):
+    evidencia = supabase.table("evidencias") \
+        .select("*") \
+        .eq("id", evidencia_id) \
+        .single() \
+        .execute()
+
+    if not evidencia.data:
+        raise HTTPException(status_code=404, detail="Evidencia no encontrada")
+
+    filename = evidencia.data["archivo_url"].split("/")[-1]
+
+    supabase.storage.from_("evidencias").remove([filename])
+
+    supabase.table("evidencias") \
+        .delete() \
+        .eq("id", evidencia_id) \
+        .execute()
+
+    return {"ok": True}
+
+@router.get("/cedulasArea/{area_id}")
+def get_cedulas_por_area_id(area_id: int):
+    cedulas = supabase.table("cedulas") \
+        .select("*") \
+        .eq("area_id", area_id) \
+        .order("id") \
+        .execute()
+
+    return {
+        "cedulas": cedulas.data
+    }
+
+
+@router.get("/{cedula_id}/word")
+def descargar_cedula_word(cedula_id: int):
+    cedula = (
+        supabase.table("cedulas")
+        .select("*")
+        .eq("id", cedula_id)
+        .single()
+        .execute()
+        .data
+    )
+
+    if not cedula:
+        raise HTTPException(status_code=404, detail="Cédula no encontrada")
+
+    estandar = cedula["estandar_nombre"]
+    criterio = cedula["criterio_nombre"]
+
+    nombre_archivo = limpiar_filename(f"{estandar} {criterio}") + ".docx"
+
+    doc = Document()
+
+    # 🔹 TÍTULO DEL DOCUMENTO
+    titulo = doc.add_heading(
+        f"Cédula del {criterio} perteneciente al {estandar}",
+        level=1,
+    )
+    titulo.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    titulo.runs[0].font.name = "Montserrat"
+
+    # 🔹 TABLA (1 columna)
+    table = doc.add_table(rows=0, cols=1)
+    table.style = "Table Grid"
+
+    agregar_bloque(table, "Eje", cedula["eje_descripcion"])
+    agregar_bloque(table, "Categoría", cedula["categoria_descripcion"])
+    agregar_bloque(table, "Indicador", cedula["indicador_descripcion"])
+    agregar_bloque(table, "Criterio", cedula["criterio_descripcion"])
+    agregar_bloque(table, "Estándar", cedula["estandar_descripcion"])
+    agregar_bloque(table, "Valoración argumentada", cedula["valoracion"])
+
+    temp = NamedTemporaryFile(delete=False, suffix=".docx")
+    doc.save(temp.name)
+    temp.close()
+
+    return FileResponse(
+        temp.name,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        filename=nombre_archivo,
+    )
+
+def set_cell_text(cell, text, *, bold=False, size=11, color=None, align="left"):
+    cell.text = ""
+    p = cell.paragraphs[0]
+    run = p.add_run(text or "")
+    run.bold = bold
+    run.font.name = "Montserrat"
+    run.font.size = Pt(size)
+
+    if color:
+        run.font.color.rgb = color
+
+    if align == "center":
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    elif align == "justify":
+        p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    else:
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+
+def titulo_fila(table, texto):
+    row = table.add_row().cells
+    row[0].merge(row[1])
+    set_cell_text(
+        row[0],
+        texto,
+        bold=True,
+        size=13,
+        color=RGBColor(0, 102, 204),
+        align="center",
+    )
+
+
+def descripcion_fila(table, texto):
+    row = table.add_row().cells
+    row[0].merge(row[1])
+    set_cell_text(
+        row[0],
+        texto,
+        size=11,
+        align="justify",
+    )
+
+def limpiar_filename(texto: str) -> str:
+    texto = unicodedata.normalize("NFKD", texto)
+    texto = texto.encode("ascii", "ignore").decode("ascii")
+    texto = re.sub(r"[^\w\s-]", "", texto)
+    texto = texto.strip().replace(" ", "_")
+    return texto
+
+
+def agregar_bloque(table, titulo, descripcion):
+    row = table.add_row().cells
+    cell = row[0]
+
+    cell.text = ""
+    p1 = cell.add_paragraph()
+    run1 = p1.add_run(titulo)
+    run1.bold = True
+    run1.font.name = "Montserrat"
+    run1.font.color.rgb = RGBColor(0, 102, 204)
+    run1.font.size = Pt(12)
+    p1.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+    p2 = cell.add_paragraph()
+    run2 = p2.add_run(descripcion or "")
+    run2.font.name = "Montserrat"
+    run2.font.size = Pt(11)
+    p2.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
